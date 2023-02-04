@@ -2,10 +2,10 @@ import random
 import time
 
 
-class Player():
+class Player(object):
     def __init__(self, name):
-        self.health = 100
         self.name = name
+        self.health = 100
         self.wins = 0
 
     def calculate_damage(self, damage_amount, attacker):
@@ -58,8 +58,7 @@ def get_computer_selection(health):
     print("....thinking....")
     time.sleep(sleep_time)
 
-    if (health <= 35):
-        # Have the computer heal ~50% of its turns when <= 35
+    if (health <= 25):
         result = random.randint(1, 6)
         if (result % 2 == 0):
             return 3
@@ -76,7 +75,6 @@ def play_round(computer, human):
     current_player = computer
 
     while game_in_progress:
-        # swap the current player each round
         if (current_player == computer):
             current_player = human
         else:
@@ -91,10 +89,11 @@ def play_round(computer, human):
 
         if (current_player == human):
             print("Available attacks:")
-            print("1) Electrocute - Causes moderate damage.")
+            print("1) Calm Swing - Causes moderate damage.")
             print("2) Wild Swing - high or low damage, "
                   "depending on your luck!")
             print("3) Nature's Kiss - Restores a moderate amount of health.")
+            print("4) Give Up - makes you lose")
             move = get_selection()
         else:
             move = get_computer_selection(computer.health)
@@ -114,6 +113,13 @@ def play_round(computer, human):
         elif (move == 3):
             heal = random.randrange(18, 25)
             current_player.calculate_heal(heal)
+        elif (move == 4):
+            if (current_player == human):
+                damage = random.randrange(100, 350)
+                human.calculate_damage(damage, computer.name.capitalize())
+            else:
+                damage = random.randrange(10, 35)
+                human.calculate_damage(damage, computer.name.capitalize())
         else:
             print ("The input was not valid. Please select a choice again.")
 
@@ -129,7 +135,7 @@ def play_round(computer, human):
 
 
 def start_game():
-    print("Welcome to the As-Yet-Unnamed turn-based battle game!")
+    print("Welcome to a python turn-based battle game!")
 
     computer = Player("Computer")
 
